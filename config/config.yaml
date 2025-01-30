@@ -1,0 +1,137 @@
+azure:
+  # Azure Storage configuration
+  storage:
+    account_name: ${AZURE_STORAGE_ACCOUNT}
+    container_name: ${AZURE_CONTAINER_NAME}
+    
+  # Azure SQL Database configuration
+  sql:
+    server: ${AZURE_SQL_SERVER}
+    database: ${AZURE_SQL_DATABASE}
+    
+  # Azure Data Factory configuration
+  data_factory:
+    name: ${AZURE_DATA_FACTORY_NAME}
+    resource_group: ${AZURE_RESOURCE_GROUP}
+    
+  # Databricks configuration
+  databricks:
+    workspace_url: ${DATABRICKS_WORKSPACE_URL}
+    cluster_id: ${DATABRICKS_CLUSTER_ID}
+
+# Data pipeline configurations
+pipeline:
+  batch_size: 10000
+  processing_interval: "1h"
+  retry_attempts: 3
+  timeout_seconds: 3600
+
+# Alert configuration
+alerts:
+  email:
+    enabled: true
+    sender: ${ALERT_EMAIL_SENDER}
+    recipients: ${ALERT_EMAIL_RECIPIENTS}
+    smtp_server: ${SMTP_SERVER}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+  
+  teams:
+    enabled: true
+    webhook_url: ${TEAMS_WEBHOOK_URL}
+  
+  thresholds:
+    pipeline_success_rate: 95.0
+    max_processing_time: 3600
+    data_quality_score: 98.0
+    max_null_percentage: 1.0
+    max_duplicate_percentage: 0.1
+  
+  severity_levels:
+    - CRITICAL
+    - ERROR
+    - WARNING
+    - INFO
+
+# Incremental loading configuration
+incremental_load:
+  watermark_container: "watermarks"
+  batch_size: 50000
+  parallel_loads: 4
+  
+  tables:
+    sales:
+      timestamp_column: "date"
+      merge_keys:
+        - "date"
+        - "product_id"
+        - "customer_id"
+      retention_days: 730
+    
+    inventory:
+      timestamp_column: "date"
+      merge_keys:
+        - "date"
+        - "product_id"
+      retention_days: 365
+
+# Data governance configuration
+governance:
+  metadata:
+    refresh_interval: "24h"
+    versioning: true
+    schema_validation: true
+    
+  lineage:
+    tracking_enabled: true
+    history_retention_days: 90
+    export_format: "json"
+    
+  sensitive_data:
+    encryption_enabled: true
+    mask_columns:
+      - "email"
+      - "phone"
+      - "address"
+      - "credit_card"
+    classification_levels:
+      - PUBLIC
+      - INTERNAL
+      - CONFIDENTIAL
+      - RESTRICTED
+    
+  compliance:
+    gdpr_enabled: true
+    hipaa_enabled: false
+    sox_enabled: false
+    
+  audit:
+    enabled: true
+    log_retention_days: 90
+    track_changes: true
+    track_access: true
+
+# Monitoring settings
+monitoring:
+  alert_email: ${ALERT_EMAIL}
+  log_retention_days: 30
+  metrics_retention_days: 90
+  
+  metrics:
+    - pipeline_success_rate
+    - data_quality_score
+    - processing_time
+    - record_count
+    - error_count
+
+# Feature flags
+features:
+  enable_real_time_processing: true
+  enable_data_quality_checks: true
+  enable_automated_backups: true
+  enable_incremental_loading: true
+  enable_alerts: true
+  enable_data_governance: true
+  enable_metadata_management: true
+  enable_lineage_tracking: true
+  enable_sensitive_data_protection: true

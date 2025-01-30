@@ -1,0 +1,11 @@
+product_id,product_name,category,subcategory,unit_price,supplier_id
+PROD001,Gaming Laptop,Electronics,Computers,999.99,SUPP001
+PROD002,4K Smart TV,Electronics,Television,1499.99,SUPP002
+PROD003,Wireless Headphones,Electronics,Audio,79.99,SUPP003
+PROD004,Smartphone,Electronics,Mobile Devices,799.99,SUPP004
+PROD005,Tablet,Electronics,Mobile Devices,599.99,SUPP001
+PROD006,Desktop Computer,Electronics,Computers,1299.99,SUPP002
+PROD007,Smartwatch,Electronics,Wearables,299.99,SUPP003
+PROD008,Bluetooth Speaker,Electronics,Audio,149.99,SUPP004
+PROD009,Digital Camera,Electronics,Photography,699.99,SUPP001
+PROD010,Gaming Console,Electronics,Gaming,499.99,SUPP002

@@ -1,0 +1,22 @@
+alerts:
+  email:
+    enabled: false
+    sender: "pipeline-monitor@company.com"
+    recipients: "team@company.com"
+    smtp_server: "smtp.company.com"
+    username: ""
+    password: ""
+  
+  teams:
+    enabled: false
+    webhook_url: ""
+  
+  thresholds:
+    pipeline_success_rate: 95.0
+    max_processing_time: 3600
+    max_memory_usage: 800
+    max_cpu_usage: 80
+    
+  notification_levels:
+    - ERROR
+    - WARNING

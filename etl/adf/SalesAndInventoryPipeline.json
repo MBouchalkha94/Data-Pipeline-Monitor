@@ -1,0 +1,177 @@
+{
+    "name": "SalesAndInventoryPipeline",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy Sales Data",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageReadSettings",
+                            "recursive": true,
+                            "wildcardFileName": "sample_sales_data.csv",
+                            "enablePartitionDiscovery": false
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "AzureSqlSink",
+                        "writeBehavior": "insert",
+                        "sqlWriterUseTableLock": false,
+                        "tableOption": "autoCreate"
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "name": "date",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "date",
+                                    "type": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "product_id",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "product_id",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "customer_id",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "customer_id",
+                                    "type": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "quantity",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "quantity",
+                                    "type": "Int32"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "unit_price",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "unit_price",
+                                    "type": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "total_amount",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "total_amount",
+                                    "type": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "discount_amount",
+                                    "type": "String"
+                                },
+                                "sink": {
+                                    "name": "discount_amount",
+                                    "type": "Decimal"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "SourceSalesDataset",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "AzureSqlSalesTable",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "Transform Sales Data",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Copy Sales Data",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Shared/SalesTransformation",
+                    "baseParameters": {
+                        "date": {
+                            "value": "@pipeline().TriggerTime",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            }
+        ],
+        "parameters": {
+            "WindowStart": {
+                "type": "string"
+            },
+            "WindowEnd": {
+                "type": "string"
+            }
+        },
+        "variables": {
+            "ProcessingDate": {
+                "type": "String"
+            }
+        },
+        "annotations": [],
+        "lastPublishTime": "2025-01-19T18:00:00Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

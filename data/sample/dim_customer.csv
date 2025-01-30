@@ -1,0 +1,11 @@
+customer_id,customer_name,email,country,city,effective_date,end_date,is_current
+CUST001,John Smith,john.smith@email.com,USA,New York,2024-01-01,NULL,1
+CUST002,Emma Johnson,emma.j@email.com,UK,London,2024-01-01,NULL,1
+CUST003,Carlos Rodriguez,carlos.r@email.com,Spain,Madrid,2024-01-01,NULL,1
+CUST004,Marie Dubois,marie.d@email.com,France,Paris,2024-01-01,NULL,1
+CUST005,Hans Weber,hans.w@email.com,Germany,Berlin,2024-01-01,NULL,1
+CUST006,Sofia Rossi,sofia.r@email.com,Italy,Rome,2024-01-01,NULL,1
+CUST007,Yuki Tanaka,yuki.t@email.com,Japan,Tokyo,2024-01-01,NULL,1
+CUST008,Li Wei,li.w@email.com,China,Beijing,2024-01-01,NULL,1
+CUST009,Anna Kowalski,anna.k@email.com,Poland,Warsaw,2024-01-01,NULL,1
+CUST010,Ahmed Hassan,ahmed.h@email.com,Egypt,Cairo,2024-01-01,NULL,1

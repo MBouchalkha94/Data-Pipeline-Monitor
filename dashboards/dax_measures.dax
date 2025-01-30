@@ -1,0 +1,167 @@
+// Sales Metrics
+Total Sales = 
+SUM(FactSales[total_amount])
+
+Total Quantity = 
+SUM(FactSales[quantity])
+
+Average Order Value = 
+DIVIDE([Total Sales], DISTINCTCOUNT(FactSales[sales_key]))
+
+Year to Date Sales = 
+CALCULATE(
+    [Total Sales],
+    DATESYTD(DimDate[date])
+)
+
+Sales Growth YoY = 
+VAR CurrentYearSales = [Year to Date Sales]
+VAR PreviousYearSales = 
+    CALCULATE(
+        [Total Sales],
+        SAMEPERIODLASTYEAR(DimDate[date])
+    )
+RETURN
+DIVIDE(
+    CurrentYearSales - PreviousYearSales,
+    PreviousYearSales,
+    0
+)
+
+// Inventory Metrics
+Current Stock Value = 
+SUMX(
+    FactInventory,
+    FactInventory[quantity_on_hand] * RELATED(DimProduct[unit_price])
+)
+
+Stock Turnover Ratio = 
+VAR AverageInventory = 
+    AVERAGEX(
+        VALUES(DimDate[date]),
+        CALCULATE(
+            SUMX(
+                FactInventory,
+                FactInventory[quantity_on_hand]
+            )
+        )
+    )
+RETURN
+DIVIDE(
+    [Total Quantity],
+    AverageInventory
+)
+
+Days of Inventory = 
+DIVIDE(
+    365,
+    [Stock Turnover Ratio]
+)
+
+Low Stock Items = 
+CALCULATE(
+    COUNTROWS(FactInventory),
+    FactInventory[quantity_available] < RELATED(DimProduct[reorder_point])
+)
+
+// Customer Metrics
+Customer Lifetime Value = 
+VAR CustomerSales = 
+    SUMMARIZE(
+        FactSales,
+        DimCustomer[customer_key],
+        "TotalSales", SUM(FactSales[total_amount])
+    )
+RETURN
+AVERAGEX(
+    CustomerSales,
+    [TotalSales]
+)
+
+Customer Retention Rate = 
+VAR CurrentCustomers = 
+    CALCULATE(
+        DISTINCTCOUNT(FactSales[customer_key]),
+        LASTDATE(DimDate[date])
+    )
+VAR PreviousCustomers = 
+    CALCULATE(
+        DISTINCTCOUNT(FactSales[customer_key]),
+        DATEADD(DimDate[date], -1, YEAR)
+    )
+RETURN
+DIVIDE(
+    CurrentCustomers,
+    PreviousCustomers
+)
+
+// Product Metrics
+Product Profit Margin = 
+DIVIDE(
+    SUM(FactSales[total_amount]) - SUM(FactSales[quantity] * RELATED(DimProduct[unit_cost])),
+    SUM(FactSales[total_amount])
+)
+
+Top Products = 
+TOPN(
+    10,
+    SUMMARIZE(
+        FactSales,
+        DimProduct[product_name],
+        "TotalSales", SUM(FactSales[total_amount])
+    ),
+    [TotalSales],
+    DESC
+)
+
+// Data Quality Metrics
+Data Completeness = 
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(FactDataQuality),
+        FactDataQuality[has_nulls] = FALSE
+    ),
+    COUNTROWS(FactDataQuality)
+)
+
+Error Rate = 
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(FactDataQuality),
+        FactDataQuality[has_errors] = TRUE
+    ),
+    COUNTROWS(FactDataQuality)
+)
+
+// Time Intelligence
+Moving Average Sales = 
+AVERAGEX(
+    DATESINPERIOD(
+        DimDate[date],
+        LASTDATE(DimDate[date]),
+        -7,
+        DAY
+    ),
+    [Total Sales]
+)
+
+Sales Forecast = 
+VAR HistoricalSales = 
+    SUMMARIZE(
+        DATESINPERIOD(
+            DimDate[date],
+            LASTDATE(DimDate[date]),
+            -90,
+            DAY
+        ),
+        DimDate[date],
+        "Sales", [Total Sales]
+    )
+RETURN
+FORECAST.ETS(
+    NEXTDAY(LASTDATE(DimDate[date])),
+    HistoricalSales[Sales],
+    HistoricalSales[date],
+    90,
+    1
+)
