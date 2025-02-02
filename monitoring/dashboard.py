@@ -620,7 +620,8 @@ else:
 
 # Add auto-refresh capability
 if st.button("Refresh Dashboard"):
-    st.experimental_rerun()
+    st.rerun()
+
 
 # Add refresh rate information
 st.sidebar.info(f"Dashboard will auto-refresh every {refresh_rate}")
