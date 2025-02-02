@@ -1,5 +1,7 @@
 # Modern Data Platform on Azure
 
+**Author:** MOHAMED BOUCHALKHA
+
 ## Project Overview
 This project implements a cloud-based data platform using Azure services to modernize an existing on-premises data warehouse. The solution provides scalable, real-time data processing capabilities with enhanced governance and monitoring.
 
