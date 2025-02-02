@@ -128,7 +128,17 @@ st.title("📊 Data Pipeline Monitor")
 st.markdown("""
 This dashboard provides real-time monitoring of your data pipelines and their performance metrics.
 """)
-
+# Add footer with author information and GitHub link
+st.markdown("""
+<div class="footer">
+    <p class="author-info">
+        Created by MOHAMED BOUCHALKHA 
+        <a href="https://github.com/MBouchalkha94/Data-Pipeline-Monitor" target="_blank" class="github-link">
+            View on GitHub
+        </a>
+    </p>
+</div>
+""", unsafe_allow_html=True)
 # Sidebar configuration
 st.sidebar.header("Dashboard Controls")
 
