@@ -96,6 +96,30 @@ st.markdown("""
         font-weight: 700 !important;
         margin: 2rem 0 !important;
     }
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(28, 31, 38, 0.95);
+        padding: 10px 20px;
+        text-align: center;
+        border-top: 1px solid rgba(250, 250, 250, 0.1);
+    }
+    .author-info {
+        color: #FAFAFA;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+    .github-link {
+        color: #00ADB5;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+    .github-link:hover {
+        color: #4DD0E1;
+        text-decoration: underline;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -622,6 +646,17 @@ else:
 if st.button("Refresh Dashboard"):
     st.rerun()
 
+# Add footer with author information and GitHub link
+st.markdown("""
+<div class="footer">
+    <p class="author-info">
+        Created by MOHAMED BOUCHALKHA 
+        <a href="https://github.com/MBouchalkha94/Data-Pipeline-Monitor" target="_blank" class="github-link">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="20" style="vertical-align: middle;"> View on GitHub
+        </a>
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # Add refresh rate information
 st.sidebar.info(f"Dashboard will auto-refresh every {refresh_rate}")
